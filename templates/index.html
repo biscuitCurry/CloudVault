@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CloudVault</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar-brand">
+        <i class="ti ti-cloud"></i>
+        <span>CloudVault</span>
+    </div>
+    <div class="navbar-right">
+        <div class="user-pill">
+            <i class="ti ti-user"></i>
+            <span>{{ username }}</span>
+        </div>
+        <form action="/logout" method="GET" style="display:inline;">
+            <button type="submit" class="logout-btn">
+                <i class="ti ti-logout"></i>
+                Logout
+            </button>
+        </form>
+    </div>
+</nav>
+
+<div class="main">
+
+    <!-- Upload Section -->
+    <div class="upload-card">
+        <div class="card-title">
+            <i class="ti ti-upload"></i>
+            Upload a file
+        </div>
+        <form action="/upload" method="POST" enctype="multipart/form-data">
+            <div class="upload-zone">
+                <i class="ti ti-cloud-upload"></i>
+                <p>Drag and drop your file here</p>
+                <small>Supports any file type — images, PDFs, documents</small>
+            </div>
+            <div class="file-input-row">
+                <label class="file-label">
+                    <i class="ti ti-paperclip"></i>
+                    <span id="file-name-display">Choose file</span>
+                    <input type="file" name="file" required id="file-input" onchange="updateFileName(this)">
+                </label>
+                <button type="submit" class="upload-btn">
+                    <i class="ti ti-upload"></i>
+                    Upload file
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Files Section -->
+    <div class="files-card">
+        <div class="files-header">
+            <div class="card-title">
+                <i class="ti ti-files"></i>
+                Your files
+            </div>
+            <span class="files-count">{{ files|length }} file{{ 's' if files|length != 1 }}</span>
+        </div>
+
+        {% if files %}
+            {% for file in files %}
+            {% set ext = file.name.rsplit('.', 1)[-1].lower() %}
+            <div class="file-row">
+                <div class="file-icon-wrap {% if ext in ['jpg','jpeg','png','gif','webp'] %}img{% elif ext == 'pdf' %}pdf{% endif %}">
+                    {% if ext in ['jpg','jpeg','png','gif','webp'] %}
+                        <i class="ti ti-photo"></i>
+                    {% elif ext == 'pdf' %}
+                        <i class="ti ti-file-type-pdf"></i>
+                    {% else %}
+                        <i class="ti ti-file"></i>
+                    {% endif %}
+                </div>
+                <div class="file-meta">
+                    <p>{{ file.name }}</p>
+                    <small>{{ ext.upper() }} file</small>
+                </div>
+                <div class="file-actions">
+                    <a href="{{ file.url }}" class="dl-btn" target="_blank">
+                        <i class="ti ti-download"></i> Download
+                    </a>
+                    <form action="/delete/{{ file.key | urlencode }}" method="POST" style="display:inline;">
+                        <button type="submit" class="del-btn" onclick="return confirm('Delete this file?')">
+                            <i class="ti ti-trash"></i> Delete
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-state">
+                <i class="ti ti-cloud-off"></i>
+                <p>No files uploaded yet. Upload your first file above!</p>
+            </div>
+        {% endif %}
+    </div>
+
+</div>
+
+<script>
+    function updateFileName(input) {
+        const display = document.getElementById('file-name-display');
+        display.textContent = input.files[0] ? input.files[0].name : 'Choose file';
+    }
+</script>
+
+</body>
+</html>

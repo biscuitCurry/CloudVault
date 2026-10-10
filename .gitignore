@@ -1,0 +1,18 @@
+# Secrets and local data
+.env
+users.json
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Local scratch
+uploads/
+
+# Editor / OS
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
