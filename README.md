@@ -2,7 +2,7 @@
 
 A personal cloud file storage web app built with Flask and Amazon S3. Users register, log in, and upload, download, and delete their own files, which are stored in an S3 bucket.
 
-Built as a group project for an AWS cloud computing course at TVETMARA Sungai Petani.
+Built as a group assignment project for the course DFK31353 – Deep Learning at TVETMARA Sungai Petani. It applies what we learned in the AWS jobsheets to a working application.
 
 ## Features
 
